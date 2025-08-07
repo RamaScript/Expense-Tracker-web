@@ -1,0 +1,89 @@
+{
+  "account_list": [
+    {
+      "id": 1,
+      "name": "Cash",
+      "balance": 47500.0
+    },
+    {
+      "id": 2,
+      "name": "Bank - HDFC",
+      "balance": 120000.0
+    },
+    {
+      "id": 3,
+      "name": "UPI - PhonePe",
+      "balance": 15000.0
+    }
+  ],
+  "categories": {
+    "income": [
+      { "id": 1, "name": "Salary" },
+      { "id": 2, "name": "Freelance" },
+      { "id": 3, "name": "Interest" }
+    ],
+    "expense": [
+      { "id": 1, "name": "Food" },
+      { "id": 2, "name": "Rent" },
+      { "id": 3, "name": "Transport" },
+      { "id": 4, "name": "Subscriptions" },
+      { "id": 5, "name": "Utilities" }
+    ]
+  },
+  "transactions": [
+    {
+      "id": 1,
+      "type": "Income",
+      "account": "Bank - HDFC",
+      "category": "Salary",
+      "amount": 75000.0,
+      "timestamp": 1691486400000,
+      "note": "Monthly salary credited"
+    },
+    {
+      "id": 2,
+      "type": "Income",
+      "account": "UPI - PhonePe",
+      "category": "Freelance",
+      "amount": 12000.0,
+      "timestamp": 1691572800000,
+      "note": "Payment for web development project"
+    },
+    {
+      "id": 3,
+      "type": "Expense",
+      "account": "Cash",
+      "category": "Food",
+      "amount": 850.5,
+      "timestamp": 1691659200000,
+      "note": "Lunch and snacks"
+    },
+    {
+      "id": 4,
+      "type": "Expense",
+      "account": "Bank - HDFC",
+      "category": "Rent",
+      "amount": 15000.0,
+      "timestamp": 1691745600000,
+      "note": "Monthly rent for flat"
+    },
+    {
+      "id": 5,
+      "type": "Expense",
+      "account": "UPI - PhonePe",
+      "category": "Subscriptions",
+      "amount": 499.0,
+      "timestamp": 1691832000000,
+      "note": "Netflix subscription"
+    },
+    {
+      "id": 6,
+      "type": "Expense",
+      "account": "Cash",
+      "category": "Transport",
+      "amount": 120.75,
+      "timestamp": 1691918400000,
+      "note": "Auto fare to office"
+    }
+  ]
+}
