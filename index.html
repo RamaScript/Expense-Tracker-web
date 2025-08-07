@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="src/css/index.css" />
+  <link rel="stylesheet" href="src/css/style.css" />
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <div class="nav">
+    <p>Expense Tracker</p>
+    <div class="nav-btn">
+      <h3 id="balance" style="color: white;">Balance: ₹0.00</h3>
+    </div>
+  </div>
+
+  <!-- Message Output -->
+  <p id="message"></p>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Account Creation -->
+    <div class="cat-dilog">
+      <h3>Create Account</h3>
+      <input type="text" id="accountinput" placeholder="Create Account (e.g., Cash)" />
+      <button class="addbtn" id="addAcct">Add</button>
+      <ul id="accountList"></ul>
+    </div>
+
+    <!-- Category Creation -->
+    <div class="cat-dilog">
+      <h3>Select Category</h3>
+      <div class="cattype">
+        <div class="income">Income
+          <ol id="incomeCategoryList">
+            </ul>
+        </div>
+        <div class="expense">Expense
+          <ol id="expenseCategoryList">
+            </ul>
+        </div>
+
+      </div>
+      <button class="addbtn" id="addmore">Add New Category </button>
+
+    </div>
+
+    <!-- Transaction Input Section -->
+    <div class="cat-dilog">
+      <h3>Add Transaction</h3>
+
+      <div class="income-exp">
+        <button id="incomeBtn">Income</button>
+        <button id="expenseBtn">Expense</button>
+      </div>
+
+      <label for="transectionAccount">Account:</label>
+      <select id="transectionAccount">
+        <option value="">-- Select Account --</option>
+      </select>
+
+      <label for="transectionCategory">Category Type:</label>
+      <select id="transectionCategory">
+        <option value="">-- Select Category Type --</option>
+      </select>
+
+      <input type="number" id="amountInput" placeholder="Enter amount" />
+      <input type="text" id="descInput" placeholder="Enter description (optional)" />
+      <button class="addbtn" id="addTransaction">Add Transaction</button>
+    </div>
+  </div>
+
+  <!-- TransactionList -->
+  <div class="full">
+    <h1 style="padding: 1rem; text-align: center;">Transactions</h1>
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Account</th>
+          <th>Category</th>
+          <th>Type</th>
+          <th>Transaction</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Action</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+
+
+
+    <h1 style="padding: 1rem; text-align: center;">Overview</h1>
+    <div class="overview">
+      <div class="incomeOverview">
+        <h3>Income Overview</h3>
+        <p id="totalIn"></p>
+        <ul id="incoverview"></ul>
+      </div>
+      <div class="expenseOverview">
+        <h3>Expense Overview</h3>
+        <p id="totalExp"></p>
+        <ul id="expoverview"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/js/data.js"></script>
+  <script type="module" src="src/js/dom.js"></script>
+  <script type="module" src="src/js/function.js"></script>
+  <script type="module" src="srr.js"></script>
+</body>
+
+
+</body>
+
+</html>
