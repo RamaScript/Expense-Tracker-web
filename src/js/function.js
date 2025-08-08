@@ -1,13 +1,9 @@
 import { balanceDisplay, transactionType, message, incomeCategory, expenseCategory } from './dom.js'
-import { transactions } from './data.js';
 import { transactionJson } from '../../srr.js'
-
 
 // Utility Functions
 function updateBalance() {
-    // balanceDisplay.textContent = `Balance: ₹${balance.toFixed(2)}`;
     balanceDisplay.innerText = `Balance: ₹${Number(window.balance).toFixed(2)}`;
-
 }
 
 function clearMessageAfterDelay() {
@@ -17,9 +13,11 @@ function clearMessageAfterDelay() {
     }, 3000);
 }
 
-function createtran(account, category, inputcat, amount, description) {
-    id += 1
+function createtran(id, account, category, inputcat, amount, description) {
+    // id += 1
     const now = new Date();
+    let demodata = transactionJson.accounts
+    let existingIds = transactionJson.transaction.map(t => t.id);
 
     // Create transaction row
     let tableRow = document.createElement("tr");
@@ -46,6 +44,7 @@ function createtran(account, category, inputcat, amount, description) {
 
     let tdeleteBtn = document.createElement("td");
     let deleteBtn = document.createElement("button");
+
     deleteBtn.textContent = "Delete";
     deleteBtn.classList.add("addbtn");
     deleteBtn.style.backgroundColor = "red";
@@ -53,19 +52,33 @@ function createtran(account, category, inputcat, amount, description) {
     // Add or subtract based on income/expense
     if (tcategory.innerText === "income") {
         window.balance += amount;
+
         tTransactionType.innerText = `+${amount.toFixed(2)}`;
         tTransactionType.style.color = "green";
+
+        for (let i in demodata) {
+            if (demodata[i].account === account && !existingIds.includes(id)) {
+                demodata[i].balance += amount
+            }
+            localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
+        }
 
     } else if (tcategory.innerText === "expense") {
         window.balance -= amount;
         tTransactionType.innerText = `-${amount.toFixed(2)}`;
         tTransactionType.style.color = "red";
-    }
+        for (let i in demodata) {
 
+            if (demodata[i].account === account && !existingIds.includes(id)) {
+                demodata[i].balance -= amount
+            }
+            localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
+        }
+    }
     updateBalance();
 
     // Delete logic
-    deleteBtn.addEventListener("click", () => {
+    deleteBtn.addEventListener("click", (e) => {
         const isIncome = tTransactionType.style.color === "green";
         if (isIncome) {
             balance -= amount;
@@ -76,11 +89,13 @@ function createtran(account, category, inputcat, amount, description) {
         clearMessageAfterDelay();
         updateBalance();
         tableRow.remove();
+        localStorage.removeItem(id)
     });
 
     //editbtn
     let teditBtn = document.createElement("td");
     let editBtn = document.createElement("button");
+
     editBtn.textContent = "Edit";
     editBtn.classList.add("dltbtn");
     editBtn.style.backgroundColor = "orange";
@@ -126,15 +141,11 @@ function createtran(account, category, inputcat, amount, description) {
         NewEditBtn.style.width = "130px";
         NewEditBtn.addEventListener("click", () => {
             div.remove()
-            console.log(editaccount.value);
-            console.log(editCategory.value);
-            console.log(editType.value);
-            console.log(editTransactionType.value);
-            console.log(editdescription.value);
 
             taccount.innerText = editaccount.value;
             tcategory.innerText = editCategory.value;
             tabledtype.innerText = editType.value
+
             let newamount = editTransactionType.value
 
             if (tcategory.innerText === "income") {
@@ -151,17 +162,20 @@ function createtran(account, category, inputcat, amount, description) {
             message.innerText = "Done."
             clearMessageAfterDelay();
             updateBalance()
-            transactions.push({
+            transactionJson.transaction.push({
+                id: id.value,
                 account: editaccount.value,
                 category: editCategory.value,
                 type: editType.value,
                 transaction: parseFloat(editTransactionType.value),
                 description: editdescription.value
             });
-            localStorage.setItem("transaction_data", JSON.stringify(transactions))
+            localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
+
         })
 
         let closebtn = document.createElement("button");
+
         closebtn.classList.add("addbtn");
         closebtn.style.backgroundColor = "red";
         closebtn.innerText = "Close";
@@ -176,17 +190,19 @@ function createtran(account, category, inputcat, amount, description) {
 
         document.querySelector("table").appendChild(div);
 
-        console.log("working on it");
+        message.innerText = "Transection Created."
+
+        clearMessageAfterDelay();
 
     });
 
-    message.innerText = "Transection Created."
-    clearMessageAfterDelay();
+
 
     tdeleteBtn.appendChild(deleteBtn);
     tableRow.append(tableID, taccount, tcategory, tabledtype, tTransactionType, tdescription, tableDate, tdeleteBtn, teditBtn);
 
     document.getElementById("table-body").appendChild(tableRow);
+
 }
 
 
@@ -195,8 +211,8 @@ function overview() {
     let totalincome = 0;
     let totalexpense = 0;
 
-    for (let i = 0; i < transactionJson.length; i++) {
-        const element = transactionJson[i];
+    for (let i = 0; i < transactionJson.transaction.length; i++) {
+        const element = transactionJson.transaction[i];
 
         if (element.category == "income") {
 
@@ -218,13 +234,18 @@ function overviewExp() {
         oVExpList[i] = 0;
     }
 
-    for (let i = 0; i < transactionJson.length; i++) {
-        const element = transactionJson[i];
+    for (let i = 0; i < transactionJson.transaction.length; i++) {
+        const element = transactionJson.transaction[i];
+
         if (element.category == "expense") {
+
+            if (!oVExpList[element.type]) {
+                oVExpList[element.type] = 0;
+            }
             oVExpList[element.type] += parseInt(element.transaction);
         }
     }
-    return(oVExpList)
+    return (oVExpList)
 }
 
 
@@ -235,10 +256,16 @@ function overviewIn() {
         oVInList[i] = 0;
     }
 
-    for (let i = 0; i < transactionJson.length; i++) {
-        const element = transactionJson[i];
+    for (let i = 0; i < transactionJson.transaction.length; i++) {
+        const element = transactionJson.transaction[i];
         if (element.category == "income") {
+
+            if (!oVInList[element.type]) {
+                oVInList[element.type] = 0;
+            }
+
             oVInList[element.type] += parseInt(element.transaction);
+
         }
     }
     return (oVInList)

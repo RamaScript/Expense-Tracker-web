@@ -10,6 +10,7 @@
 </head>
 
 <body>
+
   <!-- Navigation Bar -->
   <div class="nav">
     <p>Expense Tracker</p>
@@ -27,7 +28,8 @@
     <!-- Account Creation -->
     <div class="cat-dilog">
       <h3>Create Account</h3>
-      <input type="text" id="accountinput" placeholder="Create Account (e.g., Cash)" />
+      <input type="text" id="accountinput" placeholder="Create Account (e.g., Cash)" required />
+      <input type="number" id="accountbalance" placeholder="00" required />
       <button class="addbtn" id="addAcct">Add</button>
       <ul id="accountList"></ul>
     </div>
@@ -35,40 +37,48 @@
     <!-- Category Creation -->
     <div class="cat-dilog">
       <h3>Select Category</h3>
+
       <div class="cattype">
+
+        <!-- Income Category List -->
         <div class="income">Income
           <ol id="incomeCategoryList">
-            </ul>
+          </ol>
         </div>
+
+        <!-- Expense Category List -->
         <div class="expense">Expense
           <ol id="expenseCategoryList">
-            </ul>
+          </ol>
         </div>
 
       </div>
       <button class="addbtn" id="addmore">Add New Category </button>
-
     </div>
 
     <!-- Transaction Input Section -->
     <div class="cat-dilog">
       <h3>Add Transaction</h3>
 
+      <!-- Buttons to select income or expence -->
       <div class="income-exp">
         <button id="incomeBtn">Income</button>
         <button id="expenseBtn">Expense</button>
       </div>
 
+      <!-- Select account type -->
       <label for="transectionAccount">Account:</label>
       <select id="transectionAccount">
         <option value="">-- Select Account --</option>
       </select>
 
+      <!-- Select Category Type -->
       <label for="transectionCategory">Category Type:</label>
       <select id="transectionCategory">
         <option value="">-- Select Category Type --</option>
       </select>
 
+      <!-- Enter Amount -->
       <input type="number" id="amountInput" placeholder="Enter amount" />
       <input type="text" id="descInput" placeholder="Enter description (optional)" />
       <button class="addbtn" id="addTransaction">Add Transaction</button>
@@ -96,27 +106,38 @@
       <tbody id="table-body"></tbody>
     </table>
 
-
-
+    <!-- OverView Section -->
     <h1 style="padding: 1rem; text-align: center;">Overview</h1>
     <div class="overview">
+
+      <!-- Income OverView -->
       <div class="incomeOverview">
         <h3>Income Overview</h3>
         <p id="totalIn"></p>
+        <canvas id="myChart"></canvas>
+
         <ul id="incoverview"></ul>
       </div>
+
+      <!-- Expense OverView -->
       <div class="expenseOverview">
         <h3>Expense Overview</h3>
         <p id="totalExp"></p>
+        <canvas id="myChartExp" width="300"></canvas>
+
         <ul id="expoverview"></ul>
       </div>
     </div>
   </div>
 
+
+  <!-- Required Script  -->
   <script type="module" src="src/js/data.js"></script>
   <script type="module" src="src/js/dom.js"></script>
   <script type="module" src="src/js/function.js"></script>
   <script type="module" src="srr.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 
 

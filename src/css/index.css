@@ -84,7 +84,7 @@ ol li {
 #accountList {
     overflow: scroll;
     width: 380px;
-    height: 260px;
+    height: 225px;
 }
 
 .categoryform {
@@ -162,4 +162,9 @@ ol li {
 
 .expenseOverview {
     flex: 1;
+}
+
+#myChart,#myChartExp {
+    width: 100px;
+    height: 100px;
 }

@@ -5,6 +5,7 @@ export const message = document.querySelector("#message");
 
 // Account Elements
 export const accInput = document.querySelector("#accountinput");
+export const accountbalance = document.querySelector("#accountbalance")
 export const addAcc = document.querySelector("#addAcct");
 export const accountList = document.querySelector("#accountList");
 export const transectionAccount = document.querySelector("#transectionAccount");
@@ -31,9 +32,9 @@ export const selected = document.querySelector('input[name="category"]:checked')
 
 // Data Stores
 export let balance = 0;
-export let acclist = ["Cash", "Bank", "Savings Account", "GPay", "Crypto Wall"];
-export const incomeCategory = ["Cash Received", "Salary", "Side Income"];
-export const expenseCategory = ["Rent", "Fast Food", "Phone Recharge", "Transportation", "Groceries", "Education"];
+export let acclist = [];
+export const incomeCategory = [];
+export const expenseCategory = [];
 
 //Over view
 

@@ -1,4 +1,7 @@
+//Import Data
 import { transactions } from './src/js/data.js';
+
+// Dom Variables
 import {
     addTransactionBtn,
     message,
@@ -14,13 +17,12 @@ import {
     descInput,
     incomeBtn,
     expenseBtn,
-    incomeCategory,
-    expenseCategory,
     acclist,
     totalExpense,
     totalIncome,
     incoverviewUL,
-    expoverviewUL
+    expoverviewUL,
+    accountbalance
 
 } from '../src/js/dom.js';
 import { clearMessageAfterDelay, createtran, overview, overviewExp, overviewIn } from '../src/js/function.js';
@@ -35,10 +37,13 @@ if (!localStorage.getItem("transaction_data")) {
 }
 export let transactionJson = JSON.parse(localStorage.getItem("transaction_data"));
 
+let transactionjson = transactionJson.transaction;
+
 // Show Data Of Local Storage
-for (let i = 0; i < transactionJson.length; i++) {
-    const element = transactionJson[i];
+for (let i in transactionjson) {
+    const element = transactionjson[i];
     createtran(
+        element.id,
         element.account,
         element.category,
         element.type,
@@ -47,61 +52,72 @@ for (let i = 0; i < transactionJson.length; i++) {
     );
 }
 
+let acclistj = transactionJson.accounts;
 // Add Account List
-
-if (!localStorage.getItem("acc_List")) {
-    localStorage.setItem("acc_list", JSON.stringify(acclist));
-}
-
-let acclistj = JSON.parse(localStorage.getItem("acc_list"));
-
 acclistj.forEach(i => {
     let newli = document.createElement("li");
-    newli.innerText = i;
+    newli.innerText = `${i.account} : ${i.balance}`;
     accountList.appendChild(newli);
 
     let option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
+    option.value = i.account;
+    option.textContent = i.account;
     transectionAccount.appendChild(option);
 });
 
 // Add Income Category
+let incomeCategory = transactionJson.categories.income;
 incomeCategory.forEach(i => {
     let newli = document.createElement("li");
-    newli.innerText = i;
+    newli.innerText = i.categoryName;
     incomeCategoryList.appendChild(newli);
 });
 
 // Add Expence Category
+let expenseCategory = transactionJson.categories.expense;
 expenseCategory.forEach(i => {
     let newli = document.createElement("li");
-    newli.innerText = i;
+    newli.innerText = i.categoryName;
     expenseCategoryList.appendChild(newli);
 });
 
 // Add Account
 addAcc.addEventListener("click", () => {
     let newacc = accInput.value.trim();
+    let bal = accountbalance.value;
+
     if (newacc && !acclist.includes(newacc)) {
+
         acclist.push(newacc);
-        localStorage.setItem("acc_list", JSON.stringify(acclist));
         accInput.value = "";
+
         message.innerText = `Account '${newacc}' added.`;
         clearMessageAfterDelay();
+
         let newli = document.createElement("li");
         newli.innerText = newacc;
         accountList.appendChild(newli);
+
         let option = document.createElement("option");
         option.value = newacc;
         option.textContent = newacc;
         transectionAccount.appendChild(option);
 
-
-    } else {
+        const newAccount = {
+            id: Date.now(),
+            account: newacc,
+            balance: Number(bal)
+        };
+        console.log(newAccount.id, newAccount.account, newAccount.balance,);
+        transactionJson.accounts.push(newAccount);
+        localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
+    } 
+    
+    else {
         message.innerText = "Account already exists or invalid input.";
         clearMessageAfterDelay();
     }
+
 });
 
 // Add Category
@@ -151,9 +167,7 @@ addCategory.addEventListener("click", () => {
     let NewFormBtn = document.createElement("button");
     NewFormBtn.innerText = "Add Category";
     NewFormBtn.style.width = "130px";
-
     NewFormBtn.classList.add("addbtn");
-
     NewFormBtn.addEventListener("click", (e) => {
         e.preventDefault();
         const selectedType = categorieform.querySelector('input[name="category"]:checked').value;
@@ -167,14 +181,16 @@ addCategory.addEventListener("click", () => {
                 clearMessageAfterDelay();
 
             } else {
-                incomeCategory.push(newCategory);
                 let newli = document.createElement("li");
                 newli.innerText = newCategory;
                 incomeCategoryList.appendChild(newli);
-                let option = document.createElement("option");
-                option.value = newCategory;
-                option.textContent = newCategory;
-                transectionCategory.appendChild(option);
+                const newcate = {
+                    id: Date.now(),
+                    categoryName: newCategory,
+                    total: 0
+                }
+                transactionJson.categories.income.push(newcate);
+                localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
             }
         } else {
             if (expenseCategory.includes(newCategory)) {
@@ -182,18 +198,18 @@ addCategory.addEventListener("click", () => {
                 clearMessageAfterDelay();
 
             } else {
-                expenseCategory.push(newCategory);
                 let newli = document.createElement("li");
                 newli.innerText = newCategory;
                 expenseCategoryList.appendChild(newli);
-                let option = document.createElement("option");
-                option.value = newCategory;
-                option.textContent = newCategory;
-                transectionCategory.appendChild(option);
+                const newcate = {
+                    id: Date.now(),
+                    categoryName: newCategory,
+                    total: 0
+                }
+                transactionJson.categories.expense.push(newcate);
+                localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
             }
-        }
-
-        categorieform.remove();
+        } categorieform.remove();
     });
 
     closebtn.addEventListener("click", () => {
@@ -220,8 +236,8 @@ incomeBtn.addEventListener("click", () => {
     transectionCategory.innerText = "";
     incomeCategory.forEach(i => {
         let option = document.createElement("option");
-        option.value = i;
-        option.textContent = i;
+        option.value = i.categoryName;
+        option.textContent = i.categoryName;
         transectionCategory.appendChild(option);
     });
     message.innerText = "Done."
@@ -236,8 +252,8 @@ expenseBtn.addEventListener("click", () => {
     transectionCategory.innerText = "";
     expenseCategory.forEach(i => {
         let option = document.createElement("option");
-        option.value = i;
-        option.textContent = i;
+        option.value = i.categoryName;
+        option.textContent = i.categoryName;
         transectionCategory.appendChild(option);
     });
     message.innerText = "Done."
@@ -246,6 +262,7 @@ expenseBtn.addEventListener("click", () => {
 
 // Add Transaction
 addTransactionBtn.addEventListener("click", () => {
+    let id = getId() + 1
     let category = transactionType;
     let account = transectionAccount.value;
     let amount = parseFloat(amountInput.value);
@@ -253,7 +270,7 @@ addTransactionBtn.addEventListener("click", () => {
     let inputcat = transectionCategory.value;
 
     if (category == "income") {
-        if (!inputcat || !incomeCategory.includes(inputcat)) {
+        if (!inputcat || !incomeCategory.some(cat => cat.categoryName === inputcat)) {
             message.innerText = "Please select a valid category.";
             clearMessageAfterDelay();
             return;
@@ -261,14 +278,14 @@ addTransactionBtn.addEventListener("click", () => {
     }
 
     if (category == "expense") {
-        if (!inputcat || !expenseCategory.includes(inputcat)) {
+        if (!inputcat || !expenseCategory.some(cat => cat.categoryName === inputcat)) {
             message.innerText = "Please select a valid category.";
             clearMessageAfterDelay();
             return;
         }
     }
 
-    if (!account || !acclist.includes(account)) {
+    if (!account || !acclistj.some(acc => acc.account === account)) {
         message.innerText = "Please select a valid account.";
         clearMessageAfterDelay();
         return;
@@ -280,9 +297,9 @@ addTransactionBtn.addEventListener("click", () => {
         return;
     }
 
-    createtran(account, category, inputcat, amount, description);
-
-    transactions.push({
+    createtran(id, account, category, inputcat, amount, description);
+    transactionJson.transaction.push({
+        id,
         account,
         category: transactionType,
         type: inputcat,
@@ -290,10 +307,18 @@ addTransactionBtn.addEventListener("click", () => {
         description
     });
 
-    localStorage.setItem("transaction_data", JSON.stringify(transactions));
+    localStorage.setItem("transaction_data", JSON.stringify(transactionJson));
+    location.reload();
+
 });
 
-// Overview
+function getId() {
+    return (transactionjson[transactionjson.length - 1].id)
+}
+
+
+
+// Overview 
 const a = overview()
 let total = (a.totalexpense + a.totalincome);
 
@@ -316,5 +341,75 @@ for (let i in expOVlist) {
     li.innerText = `${i} = ${expOVlist[i]}`
     expoverviewUL.append(li);
 }
+
+const ctx = document.getElementById('myChart');
+const incomeKeys = Object.keys(incomeOVlist); 
+const incomeValues = Object.values(incomeOVlist); 
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: incomeKeys,  
+        datasets: [{
+            data: incomeValues, 
+            backgroundColor: [
+                'rgba(219, 24, 24, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(248, 252, 9, 0.8)',
+                'rgba(27, 198, 221, 0.8)',
+                'rgba(89, 24, 221, 0.8)'
+            ],
+            borderColor: 'rgba(255, 255, 255, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Income Overview'
+            }
+        }
+    }
+});
+
+// Overview Income
+const exp = document.getElementById('myChartExp');
+const expenseKeys = Object.keys(expOVlist); 
+const expenseValues = Object.values(expOVlist); 
+
+new Chart(exp, {
+    type: 'pie',
+    data: {
+        labels: expenseKeys, 
+        datasets: [{
+            data: expenseValues, 
+            backgroundColor: [
+                'rgba(219, 24, 24, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(248, 252, 9, 0.8)',
+                'rgba(27, 198, 221, 0.8)'
+            ],
+            borderColor: 'rgba(255, 255, 255, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Expense Overview'
+            }
+        }
+    }
+});
 
 
