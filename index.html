@@ -105,31 +105,29 @@
       </thead>
       <tbody id="table-body"></tbody>
     </table>
+  </div>
+  <!-- OverView Section -->
 
-    <!-- OverView Section -->
-    <h1 style="padding: 1rem; text-align: center;">Overview</h1>
-    <div class="overview">
+  <h1 style="padding: 1rem; text-align: center;">Overview</h1>
+  <div class="overview">
 
-      <!-- Income OverView -->
-      <div class="incomeOverview">
-        <h3>Income Overview</h3>
-        <p id="totalIn"></p>
-        <canvas id="myChart"></canvas>
+    <!-- Income OverView -->
+    <div class="incomeOverview">
+      <h3>Income Overview</h3>
+      <p id="totalIn"></p>
+      <canvas id="myChart"></canvas>
+      <ul id="incoverview"></ul>
+    </div>
 
-        <ul id="incoverview"></ul>
-      </div>
+    <!-- Expense OverView -->
+    <div class="expenseOverview">
+      <h3>Expense Overview</h3>
+      <p id="totalExp"></p>
+      <canvas id="myChartExp" width="300"></canvas>
 
-      <!-- Expense OverView -->
-      <div class="expenseOverview">
-        <h3>Expense Overview</h3>
-        <p id="totalExp"></p>
-        <canvas id="myChartExp" width="300"></canvas>
-
-        <ul id="expoverview"></ul>
-      </div>
+      <ul id="expoverview"></ul>
     </div>
   </div>
-
 
   <!-- Required Script  -->
   <script type="module" src="src/js/data.js"></script>

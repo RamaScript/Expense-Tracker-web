@@ -89,7 +89,10 @@ function createtran(id, account, category, inputcat, amount, description) {
         clearMessageAfterDelay();
         updateBalance();
         tableRow.remove();
-        localStorage.removeItem(id)
+        console.log(id);
+        
+        // localStorage.setItem("transaction_data", JSON.stringify(tableRow));
+
     });
 
     //editbtn
